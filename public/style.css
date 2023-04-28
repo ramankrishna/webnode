@@ -1,0 +1,136 @@
+
+:root{
+
+    --main-radius: 5px;
+    --main-padding: 5px;
+    --blue : #A4B494;
+    --white : #BEC5AD;
+    --yellow : #BEC5AD;
+    --green : #519872;
+}
+
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+  }
+  
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+
+  .container{
+    background-color: white;
+    font-family: 'noto sarrif', serif;
+    font-size: 1rem;
+    color : black;
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "header"
+    "about"
+    "education"
+    "projects"
+    "experience"
+    "contact"
+    "blogs"
+    "footer";
+    grid-gap: 1.5em;
+}
+  
+  .about {
+      background-color: var(--white);
+      padding: 20px;
+      border : 1px solid black;
+      grid-area: about;
+      color: black;
+  } 
+  .education {
+      background-color: var(--blue);
+      padding: 20px;
+      border : 1px solid black;
+      grid-area: education;
+  }
+  .projects {
+      background-color: var(--yellow);
+      padding: 20px;
+      border : 1px solid black;
+    grid-area: projects;
+  }
+  .experience {
+      background-color: var(--green);
+      padding: 20px;
+      border : 1px solid black;
+      grid-area: experience;
+  }
+  .contact {
+      background-color: var(--white);
+      padding: 20px;
+      border : 1px solid black;
+        grid-area: contact;
+  }
+  .blogs {
+      background-color: var(--blue);
+      padding: 20px;
+      border : 1px solid black;
+      grid-area: blogs;
+  }
+  .footer {
+      background-color: var(--yellow);
+      padding: 20px;
+      border : 1px solid black;
+      grid-area: footer;
+  }
+  .header {
+      background-color: var(--green);
+      padding: 20px;
+      border : 1px solid black;
+      color : whitesmoke;
+      grid-area: header;
+  }
+
+  
+  @media only screen and (max-width: 500px){
+    .container{
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.2fr 1.5fr 0.5fr 0.5fr 0.5fr 1fr;
+        grid-template-areas:
+        "header"
+        "about"
+        "education"
+        "projects"
+        "experience"
+        "contact"
+        "blogs"
+        "footer"
+        ;
+    }
+
+    .header {
+        background-color: black;
+    }
+    .about {
+        padding: 10px;
+    }
+    .education {
+        padding: 10px;
+        color: #519872;
+    }
+    .blogs {
+        padding: 10px;
+        background-color: azure;
+    }
+}
+
+
+  
+
+  
+  
+  

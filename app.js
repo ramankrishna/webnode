@@ -32,14 +32,11 @@ stocksFromDBPromise = client.db("stocks").collection("stockrecords").find().toAr
 
 
 
-
-const stocks = [
-    { name: 'AAPL', price: 200, change: 10, percentChange: 5, volume: 1000 },
-    { name: 'GOOG', price: 300, change: 20, percentChange: 10, volume: 2000 },
-    { name: 'MSFT', price: 400, change: 30, percentChange: 15, volume: 3000 },
-    { name: 'AMZN', price: 500, change: 40, percentChange: 20, volume: 4000 },
-    { name: 'FB', price: 600, change: 50, percentChange: 25, volume: 5000 }
-];
+ // Read the stock array from db.json   
+const stocks = fs.readFileSync(path.join(__dirname,'public' ,'db.json'),'utf-8', (err, data) => {
+    if (err) throw err;
+    return JSON.stringify(data);
+});
 
 const server = http.createServer((req, res) => {
 
@@ -77,6 +74,7 @@ const server = http.createServer((req, res) => {
                 res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
                 res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
                 res.writeHead(200, { 'Content-Type': 'application/json'});
+                console.log(stocks);
                 res.write(JSON.stringify(stocksFromDB));
                 break;
             default :    

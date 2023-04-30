@@ -1,6 +1,38 @@
 const http = require('http'); 
 const path = require('path');
 const fs = require('fs');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const uri = "mongodb+srv://ramankrishna10:Krrishna123@cluster0.qpnuaxe.mongodb.net/test?authSource=admin&replicaSet=atlas-p4if4c-shard-0&readPreference=primary&ssl=true";
+stocksFromDB = [];
+
+
+ const client = new MongoClient(uri, {
+    serverApi: {
+      version: ServerApiVersion.v1,
+      strict: true,
+      deprecationErrors: true,
+    }
+  });
+
+stocksFromDBPromise = client.db("stocks").collection("stockrecords").find().toArray(function(err, result) {
+    if (err) throw err;
+    return result;
+    });
+
+    stocksFromDBPromise.then((result) => {
+        stocksFromDB = result;
+    }).
+    then(() => {
+        console.log(stocksFromDB);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
+
+
+
+
 const stocks = [
     { name: 'AAPL', price: 200, change: 10, percentChange: 5, volume: 1000 },
     { name: 'GOOG', price: 300, change: 20, percentChange: 10, volume: 2000 },
@@ -22,69 +54,36 @@ const server = http.createServer((req, res) => {
             'utf8'
         );
 
-        switch (req.url) {
+         switch (req.url) {
             case "/style.css" :
                 res.writeHead(200, {"Content-Type": "text/css"});
                 res.write(css);
                 break;
             case "/api" :
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(stocks));
+                    client.db("stocks").collection("stockrecords").find().toArray(function(err, result) {
+                    if (err) throw err;
+                    return result;
+                    }).then((result) => {
+                        stocksFromDB = result;
+                    }).
+                    then(() => {
+                        console.log(stocksFromDB);
+                    })
+                    .catch((err) => {
+                        stocksFromDB = stocks;
+                    });
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Credentials", "true");
+                res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+                res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+                res.writeHead(200, { 'Content-Type': 'application/json'});
+                res.write(JSON.stringify(stocksFromDB));
                 break;
             default :    
                 res.writeHead(200, {"Content-Type": "text/html"});
                 res.write(content);
         };
         res.end();
-
-
-
-        // write the html and css files to the response
-
-        
-
-
-    /* Title of the Project: - Stock Trading Application
-
-Attributes that are fetched from API for each Stock:
-
-Stock Name
-Price
-Change
-Percent Change
-Volume
-
-*/
-
-
-
-        // fetch the stocks from the mongoDB by creating the connection to the database
-
-       /* const MongoClient = require('mongodb').MongoClient;
-        const url = "mongodb://localhost:27017/";
-
-        MongoClient.connect(url, function(err, db) {
-            if (err) throw err;
-            var dbo = db.db("mydb");
-            dbo.collection("stocks").find({}).toArray(function(err, result) {
-                if (err) throw err;
-                //convert the result to JSON array and write it to api endpoint
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify(result));
-                db.close();
-            });
-
-
-        
-
-*/
-
-
-        // allow the cors origin
-       
-
 });
 
 const PORT = process.env.PORT || 5552;
